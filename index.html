@@ -696,8 +696,6 @@
               : sy === "s"
                 ? `${you.n} is asleep. Leave a message for when ${you.n === "Mika" ? "he" : "she"} wakes up.`
                 : `${you.n} might be up. Try a message first.`;
-          if (left > 0) msg += ` Mika leaves Sydney in ${left} day${left === 1 ? "" : "s"}.`;
-          else if (left === 0) msg += " Mika flies today. Gute Reise.";
           document.getElementById("banner").textContent = msg;
         }
 
