@@ -6,7 +6,7 @@ Two clocks, two skies, and a countdown until Sydney and Karlsruhe meet again.
 
 ---
 
-**Hey Mika,**
+**Hi Mika,**
 
 You build things for fun, so this time I built one for you.
 
