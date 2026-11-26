@@ -63,7 +63,6 @@ Zwischenzeit.js       Scriptable widget
 Pick one, open an issue, send a pull request. I'll review it. Strictly.
 
 - [ ] **Today's photo**: one photo and one line a day from each of us, shown in the app and the widget
-- [ ] **Karlsruhe weather** next to the clock, so I know when you're freezing
 - [ ] **Sync settings** between our phones, so changing a bedtime on one phone updates the other
 - [ ] **Push notification** when the other person posts something
 - [ ] **Fix the 00:xx hour in the widget**: the live timer drops the hour after midnight. There must be a cleverer trick.
