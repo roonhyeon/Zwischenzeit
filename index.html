@@ -1,0 +1,859 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Zwischenzeit</title>
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Zwischenzeit" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0c0e16" media="(prefers-color-scheme: dark)" />
+    <link rel="apple-touch-icon" href="icon-180.png" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: light-dark(#ffffff, #0c0e16);
+        --ink: light-dark(#15131c, #eef0f7);
+        --mut: light-dark(#6c6979, #9aa0b6);
+        --line: light-dark(#ececf2, #23273a);
+        --card: light-dark(#f5f5f9, #151826);
+        --acc: #ff5a4e;
+        --me: #2f6bff;
+        --you: #ffb400;
+      }
+      :root[data-theme="light"] {
+        color-scheme: light;
+      }
+      :root[data-theme="dark"] {
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+        min-width: 0;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font:
+          16px/1.55 Inter,
+          system-ui,
+          sans-serif;
+        overflow-x: clip;
+      }
+      main {
+        max-width: 980px;
+        margin: 0 auto;
+      }
+      .band {
+        padding: clamp(20px, 4vw, 40px) max(5vw, 16px);
+      }
+      .top {
+        padding-bottom: 8px;
+      }
+      h1 {
+        font:
+          700 clamp(32px, 6vw, 46px)/1.05 Sora,
+          sans-serif;
+        letter-spacing: -0.02em;
+        margin: 0;
+        text-wrap: balance;
+      }
+      h2 {
+        font:
+          600 22px/1.2 Sora,
+          sans-serif;
+        margin: 0 0 6px;
+      }
+      .sub {
+        margin: 6px 0 0;
+        color: var(--mut);
+      }
+      .banner {
+        margin: 16px 0 0;
+        padding: 12px 16px;
+        border-radius: 14px;
+        background: color-mix(in srgb, var(--acc) 12%, transparent);
+        font-weight: 500;
+      }
+      .muted {
+        color: var(--mut);
+        margin: 0 0 14px;
+        font-size: 15px;
+      }
+      .tiny {
+        color: var(--mut);
+        font-size: 13px;
+        margin: 12px 0 0;
+      }
+      .windows {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 14px;
+        padding-top: 12px;
+        padding-bottom: 6px;
+      }
+      .gap {
+        grid-column: 1/-1;
+        text-align: center;
+        color: var(--mut);
+        margin: 2px 0 0;
+        font-size: 15px;
+      }
+      .gap b {
+        color: var(--ink);
+        font-weight: 600;
+      }
+      .win {
+        position: relative;
+        border-radius: 24px;
+        padding: 14px 18px 18px;
+        background: linear-gradient(180deg, var(--c1), var(--c2));
+        color: #15131c;
+        overflow: hidden;
+        transition: background 1s;
+      }
+      .win.dk {
+        color: #fff;
+      }
+      .arc {
+        display: block;
+        width: 100%;
+        height: auto;
+        margin-bottom: 4px;
+      }
+      .who {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      .nm {
+        font:
+          600 18px Sora,
+          sans-serif;
+      }
+      .city {
+        font-size: 14px;
+        opacity: 0.8;
+      }
+      .time {
+        font:
+          600 clamp(38px, 8vw, 60px)/1 Sora,
+          sans-serif;
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        margin-top: 8px;
+        white-space: nowrap;
+      }
+      .sec {
+        font-size: 0.4em;
+        opacity: 0.6;
+        margin-left: 2px;
+      }
+      .date {
+        font-size: 14px;
+        opacity: 0.85;
+        margin-top: 4px;
+      }
+      .pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 6px 12px;
+        border-radius: 99px;
+        background: rgba(255, 255, 255, 0.6);
+        color: #15131c;
+        font-weight: 500;
+        font-size: 14px;
+        margin-top: 14px;
+      }
+      .dk .pill {
+        background: rgba(255, 255, 255, 0.14);
+        color: #fff;
+      }
+      .pill i {
+        width: 9px;
+        height: 9px;
+        border-radius: 50%;
+        flex: none;
+      }
+      .pill.a i {
+        background: var(--acc);
+      }
+      .pill.m i {
+        background: var(--you);
+      }
+      .pill.s i {
+        background: #8c93b0;
+      }
+      .strip {
+        display: grid;
+        grid-template-columns: 62px minmax(0, 1fr);
+        gap: 8px 10px;
+        align-items: center;
+        position: relative;
+      }
+      .lab {
+        font-size: 14px;
+        font-weight: 500;
+      }
+      .cells {
+        display: flex;
+        height: 24px;
+        border-radius: 7px;
+        overflow: hidden;
+        grid-column: 2;
+      }
+      .cells span {
+        flex: 1;
+      }
+      .cells .a {
+        background: var(--c);
+      }
+      .cells .m {
+        background: color-mix(in srgb, var(--c) 38%, transparent);
+      }
+      .cells .s {
+        background: var(--line);
+      }
+      .r1 {
+        --c: var(--me);
+      }
+      .r2 {
+        --c: var(--you);
+      }
+      .r3 {
+        --c: var(--acc);
+      }
+      .nowl {
+        grid-column: 2;
+        grid-row: 1/4;
+        align-self: stretch;
+        position: relative;
+        pointer-events: none;
+      }
+      .nowl i {
+        position: absolute;
+        top: -6px;
+        bottom: -6px;
+        width: 2px;
+        background: var(--ink);
+        border-radius: 2px;
+      }
+      .nowl b {
+        position: absolute;
+        top: -24px;
+        transform: translateX(-50%);
+        font: 600 11px Inter;
+        color: var(--ink);
+        white-space: nowrap;
+      }
+      .ticks {
+        grid-column: 2;
+        position: relative;
+        height: 18px;
+        font-size: 12px;
+        color: var(--mut);
+      }
+      .ticks span {
+        position: absolute;
+        transform: translateX(-50%);
+        white-space: nowrap;
+      }
+      .ticks span:first-child {
+        transform: none;
+      }
+      .ticks span:last-child {
+        transform: translateX(-100%);
+      }
+      .key {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px 16px;
+        font-size: 13px;
+        color: var(--mut);
+        margin-top: 14px;
+      }
+      .key i {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 3px;
+        vertical-align: -1px;
+        margin-right: 6px;
+      }
+      .runs {
+        list-style: none;
+        padding: 0;
+        margin: 16px 0 0;
+        display: grid;
+        gap: 8px;
+      }
+      .runs li {
+        background: var(--card);
+        border-radius: 14px;
+        padding: 12px 14px;
+      }
+      .runs b {
+        font:
+          600 17px Sora,
+          sans-serif;
+        white-space: nowrap;
+      }
+      .runs small {
+        display: block;
+        color: var(--mut);
+        font-size: 14px;
+      }
+      .counts {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 12px;
+      }
+      .cnt {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 16px 18px;
+      }
+      .cnt .t {
+        font-size: 14px;
+        color: var(--mut);
+      }
+      .cnt .big {
+        font:
+          600 30px/1.15 Sora,
+          sans-serif;
+        margin: 4px 0;
+        white-space: nowrap;
+        font-variant-numeric: tabular-nums;
+      }
+      .cnt .w {
+        font-size: 14px;
+      }
+      .cnt.hl {
+        background: var(--acc);
+        color: #fff;
+      }
+      .cnt.hl .t {
+        color: rgba(255, 255, 255, 0.85);
+      }
+      #dst {
+        margin-top: 14px;
+      }
+      details {
+        background: var(--card);
+        border-radius: 18px;
+        padding: 4px 16px;
+      }
+      summary {
+        cursor: pointer;
+        min-height: 44px;
+        display: flex;
+        align-items: center;
+        font:
+          600 17px Sora,
+          sans-serif;
+      }
+      summary:focus-visible,
+      input:focus-visible,
+      select:focus-visible {
+        outline: 2px solid var(--me);
+        outline-offset: 2px;
+      }
+      form {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 12px 20px;
+        padding: 8px 0 18px;
+      }
+      fieldset {
+        border: 0;
+        padding: 0;
+        margin: 0;
+        display: grid;
+        gap: 8px;
+      }
+      legend {
+        font-weight: 600;
+        margin-bottom: 6px;
+      }
+      label {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) 140px;
+        align-items: center;
+        gap: 10px;
+        font-size: 15px;
+      }
+      input,
+      select {
+        font:
+          16px Inter,
+          sans-serif;
+        min-height: 44px;
+        padding: 0 10px;
+        border-radius: 10px;
+        border: 1px solid var(--line);
+        background: var(--bg);
+        color: var(--ink);
+        width: 100%;
+      }
+      @media (max-width: 440px) {
+        .windows {
+          grid-template-columns: minmax(0, 1fr);
+        }
+        .time {
+          font-size: 52px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .win {
+          transition: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <header class="band top">
+        <h1>Zwischenzeit</h1>
+        <p class="sub">Suyeon in Sydney · Mika in Karlsruhe · the time in between</p>
+        <p class="banner" id="banner"></p>
+      </header>
+
+      <section class="band windows" id="windows" aria-live="off"></section>
+
+      <section class="band">
+        <h2>When are we both awake?</h2>
+        <p class="muted" id="stripnote"></p>
+        <div class="strip" id="strip"></div>
+        <div class="key">
+          <span><i style="background: var(--me)"></i>Awake</span
+          ><span><i style="background: color-mix(in srgb, var(--me) 38%, transparent)"></i>Maybe up</span
+          ><span><i style="background: var(--line)"></i>Asleep</span
+          ><span><i style="background: var(--acc)"></i>Both awake</span>
+        </div>
+        <ul class="runs" id="runs"></ul>
+      </section>
+
+      <section class="band">
+        <h2>Countdowns</h2>
+        <div class="counts" id="counts"></div>
+        <p class="muted" id="dst"></p>
+      </section>
+
+      <section class="band">
+        <details id="settings">
+          <summary>Settings</summary>
+          <form id="form">
+            <fieldset>
+              <legend>This phone</legend>
+              <label
+                >Whose phone is this?<select data-k="me">
+                  <option value="suyeon">Suyeon</option>
+                  <option value="mika">Mika</option>
+                </select></label
+              >
+            </fieldset>
+            <fieldset>
+              <legend>Suyeon (Sydney time)</legend>
+              <label>Up on busy days<input type="time" data-k="suyeon.we" /></label>
+              <label>Up on normal days<input type="time" data-k="suyeon.wl" /></label>
+              <label>Bedtime<input type="time" data-k="suyeon.bed" /></label>
+            </fieldset>
+            <fieldset>
+              <legend>Mika (Karlsruhe time)</legend>
+              <label>Up on normal days<input type="time" data-k="mika.we" /></label>
+              <label>Up when lazy<input type="time" data-k="mika.wl" /></label>
+              <label>Bedtime<input type="time" data-k="mika.bed" /></label>
+            </fieldset>
+            <fieldset>
+              <legend>Dates and calls (Sydney time)</legend>
+              <label>Mika leaves Sydney<input type="date" data-k="leave" /></label>
+              <label>Reunion day<input type="date" data-k="meet" /></label>
+              <label
+                >Weekly call day<select data-k="callDay">
+                  <option value="0">Sunday</option>
+                  <option value="1">Monday</option>
+                  <option value="2">Tuesday</option>
+                  <option value="3">Wednesday</option>
+                  <option value="4">Thursday</option>
+                  <option value="5">Friday</option>
+                  <option value="6">Saturday</option>
+                </select></label
+              >
+              <label>Weekly call time<input type="time" data-k="callTime" /></label>
+              <label>First video call<input type="date" data-k="vidDate" /></label>
+              <label>Video call time<input type="time" data-k="vidTime" /></label>
+            </fieldset>
+          </form>
+        </details>
+        <p class="tiny">
+          Bedtimes, call times and the reunion date can be changed in Settings. In this preview, settings are saved on
+          this device only.
+        </p>
+      </section>
+    </main>
+
+    <script>
+      {
+        const P = [
+          { k: "suyeon", n: "Suyeon", c: "Sydney", tz: "Australia/Sydney" },
+          { k: "mika", n: "Mika", c: "Karlsruhe", tz: "Europe/Berlin" },
+        ];
+        const SYD = "Australia/Sydney";
+        const D = {
+          me: "suyeon",
+          suyeon: { we: "07:00", wl: "09:00", bed: "00:30" },
+          mika: { we: "08:00", wl: "10:00", bed: "00:00" },
+          leave: "2027-01-11",
+          meet: "2027-12-20",
+          callDay: "0",
+          callTime: "20:00",
+          vidDate: "2026-11-29",
+          vidTime: "20:00",
+        };
+        const clone = (o) => JSON.parse(JSON.stringify(o));
+        let S = clone(D);
+        try {
+          const saved = JSON.parse(localStorage.getItem("zwischenzeit") || "{}");
+          S = {
+            ...S,
+            ...saved,
+            suyeon: { ...S.suyeon, ...(saved.suyeon || {}) },
+            mika: { ...S.mika, ...(saved.mika || {}) },
+          };
+        } catch (e) {}
+        const save = () => {
+          try {
+            localStorage.setItem("zwischenzeit", JSON.stringify(S));
+          } catch (e) {}
+        };
+
+        const FMT = {};
+        const fmtr = (tz) =>
+          FMT[tz] ||
+          (FMT[tz] = new Intl.DateTimeFormat("en-GB", {
+            timeZone: tz,
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            weekday: "short",
+            hourCycle: "h23",
+          }));
+        const WD = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+        function parts(tz, d = new Date()) {
+          const o = {};
+          for (const p of fmtr(tz).formatToParts(d)) o[p.type] = p.value;
+          return {
+            y: +o.year,
+            mo: +o.month,
+            d: +o.day,
+            h: +o.hour % 24,
+            mi: +o.minute,
+            s: +o.second,
+            wd: WD.indexOf(o.weekday),
+          };
+        }
+        function off(tz, d = new Date()) {
+          const p = parts(tz, d);
+          return Math.round(
+            (Date.UTC(p.y, p.mo - 1, p.d, p.h, p.mi, p.s) - Math.floor(d.getTime() / 1000) * 1000) / 60000,
+          );
+        }
+        const toM = (s) => {
+          const [a, b] = String(s || "0:0")
+            .split(":")
+            .map(Number);
+          return (a || 0) * 60 + (b || 0);
+        };
+        const pad = (n) => String(n).padStart(2, "0");
+        const fmtM = (m) => {
+          m = ((Math.round(m) % 1440) + 1440) % 1440;
+          return pad(Math.floor(m / 60)) + ":" + pad(m % 60);
+        };
+        const inW = (t, a, b) => (a <= b ? t >= a && t < b : t >= a || t < b);
+        function status(k, t) {
+          const r = S[k];
+          if (inW(t, toM(r.wl), toM(r.bed))) return "a";
+          if (inW(t, toM(r.we), toM(r.wl))) return "m";
+          return "s";
+        }
+        const MAYBE = { suyeon: "Maybe up, depends on the day", mika: "Probably up… or snoozing" };
+        const label = (k, st) => (st === "a" ? "Awake" : st === "m" ? MAYBE[k] : "Asleep");
+        const dn = (s) => {
+          const [a, b, c] = String(s).split("-").map(Number);
+          return Date.UTC(a, b - 1, c) / 864e5;
+        };
+        const todayDn = (tz) => {
+          const z = parts(tz);
+          return Date.UTC(z.y, z.mo - 1, z.d) / 864e5;
+        };
+        function localInstant(tz, day, min) {
+          const u0 = day * 864e5 + min * 6e4;
+          let t = u0 - off(tz, new Date(u0)) * 6e4;
+          t = u0 - off(tz, new Date(t)) * 6e4;
+          return t;
+        }
+        const dayFmt = {};
+        function when(tz, ms) {
+          const f =
+            dayFmt[tz] ||
+            (dayFmt[tz] = new Intl.DateTimeFormat("en-AU", {
+              timeZone: tz,
+              weekday: "short",
+              day: "numeric",
+              month: "short",
+              hour: "2-digit",
+              minute: "2-digit",
+              hourCycle: "h23",
+            }));
+          return f.format(new Date(ms));
+        }
+        function dur(ms) {
+          if (ms < 0) ms = 0;
+          const d = Math.floor(ms / 864e5),
+            h = Math.floor((ms % 864e5) / 36e5),
+            m = Math.floor((ms % 36e5) / 6e4);
+          return d > 0 ? `${d}d ${h}h` : `${h}h ${m}m`;
+        }
+        const people = () => {
+          const me = P.find((p) => p.k === S.me) || P[0];
+          return [me, P.find((p) => p !== me)];
+        };
+
+        function sky(h) {
+          if (h < 5 || h >= 21) return ["#141a3a", "#2d3468", 1];
+          if (h < 7) return ["#ff9f7a", "#ffe1cc", 0];
+          if (h < 18) return ["#58a6ff", "#d6ecff", 0];
+          return ["#ff7a59", "#3a3f7a", 1];
+        }
+
+        function win(p) {
+          const z = parts(p.tz),
+            t = z.h * 60 + z.mi,
+            st = status(p.k, t),
+            [c1, c2, dk] = sky(z.h),
+            hf = z.h + z.mi / 60;
+          const sun = hf >= 6 && hf < 20,
+            tt = sun ? (hf - 6) / 14 : ((hf - 20 + 24) % 24) / 10;
+          const x = (1 - tt) ** 2 * 10 + 2 * (1 - tt) * tt * 100 + tt * tt * 190,
+            y = (1 - tt) ** 2 * 75 + 2 * (1 - tt) * tt * -15 + tt * tt * 75;
+          const body = sun
+            ? `<circle cx="${x}" cy="${y}" r="15" fill="#ffd23f" opacity=".28"/><circle cx="${x}" cy="${y}" r="9" fill="#ffd23f"/>`
+            : `<circle cx="${x}" cy="${y}" r="8" fill="#f4f1ff"/><circle cx="${x + 4}" cy="${y - 3}" r="7" fill="${c1}"/>`;
+          const stars = sun
+            ? ""
+            : [
+                [30, 20],
+                [60, 8],
+                [150, 14],
+                [178, 30],
+                [110, 30],
+              ]
+                .map(([a, b]) => `<circle cx="${a}" cy="${b}" r="1.1" fill="#fff" opacity=".7"/>`)
+                .join("");
+          const date = new Intl.DateTimeFormat("en-AU", {
+            timeZone: p.tz,
+            weekday: "long",
+            day: "numeric",
+            month: "short",
+          }).format(new Date());
+          return `<article class="win${dk ? " dk" : ""}" style="--c1:${c1};--c2:${c2}">
+  <svg class="arc" viewBox="0 0 200 84" aria-hidden="true">${stars}<path d="M10 75 Q100 -15 190 75" fill="none" stroke="currentColor" stroke-opacity=".35" stroke-dasharray="2 5"/>${body}<line x1="0" y1="82" x2="200" y2="82" stroke="currentColor" stroke-opacity=".25"/></svg>
+  <div class="who"><span class="nm">${p.n}</span><span class="city">${p.c}</span></div>
+  <div class="time">${fmtM(t)}<span class="sec">:${pad(z.s)}</span></div>
+  <div class="date">${date}</div>
+  <div class="pill ${st}"><i></i>${label(p.k, st)}</div></article>`;
+        }
+
+        function tick() {
+          const [me, you] = people();
+          const g = (off(SYD) - off("Europe/Berlin")) / 60;
+          document.getElementById("windows").innerHTML =
+            win(me) + win(you) + `<p class="gap">Karlsruhe is <b>${g} hours</b> behind Sydney right now</p>`;
+          const zm = parts(me.tz),
+            zy = parts(you.tz);
+          const sm = status(me.k, zm.h * 60 + zm.mi),
+            sy = status(you.k, zy.h * 60 + zy.mi);
+          const left = dn(S.leave) - todayDn(SYD);
+          let msg =
+            sm === "a" && sy === "a"
+              ? `You're both awake right now. Good moment to call ${you.n}.`
+              : sy === "s"
+                ? `${you.n} is asleep. Leave a message for when ${you.n === "Mika" ? "he" : "she"} wakes up.`
+                : `${you.n} might be up. Try a message first.`;
+          if (left > 0) msg += ` Mika leaves Sydney in ${left} day${left === 1 ? "" : "s"}.`;
+          else if (left === 0) msg += " Mika flies today. Gute Reise.";
+          document.getElementById("banner").textContent = msg;
+        }
+
+        function strip() {
+          const [me, you] = people(),
+            z = parts(me.tz),
+            now = z.h * 60 + z.mi,
+            base = Date.now();
+          const a = [],
+            b = [],
+            c = [];
+          for (let i = 0; i < 96; i++) {
+            const m = i * 15,
+              zo = parts(you.tz, new Date(base + (m - now) * 6e4));
+            const s1 = status(me.k, m),
+              s2 = status(you.k, zo.h * 60 + zo.mi);
+            a.push(s1);
+            b.push(s2);
+            c.push(s1 === "a" && s2 === "a" ? "a" : s1 !== "s" && s2 !== "s" ? "m" : "s");
+          }
+          const row = (arr, cls, r) =>
+            `<div class="cells ${cls}" style="grid-row:${r}">${arr.map((s) => `<span class="${s}"></span>`).join("")}</div>`;
+          const pct = (now / 1440) * 100;
+          document.getElementById("strip").innerHTML =
+            `<span class="lab" style="grid-row:1">${me.n}</span>${row(a, "r1", 1)}<span class="lab" style="grid-row:2">${you.n}</span>${row(b, "r2", 2)}<span class="lab" style="grid-row:3">Both</span>${row(c, "r3", 3)}` +
+            `<div class="nowl"><i style="left:${pct}%"></i><b style="left:${pct}%">now</b></div><div class="ticks" style="grid-row:4">${[0, 6, 12, 18, 24].map((h) => `<span style="left:${(h / 24) * 100}%">${pad(h % 24 === 0 && h ? 0 : h)}:00</span>`).join("")}</div>`;
+          document.getElementById("stripnote").textContent =
+            `Shown in ${me.c} time for today. Faded parts are “maybe up” hours.`;
+          let runs = [],
+            st = -1;
+          for (let i = 0; i <= 96; i++) {
+            if (i < 96 && c[i] === "a") {
+              if (st < 0) st = i;
+            } else if (st >= 0) {
+              runs.push([st, i]);
+              st = -1;
+            }
+          }
+          if (runs.length > 1 && runs[0][0] === 0 && runs[runs.length - 1][1] === 96) {
+            const l = runs.pop();
+            runs[0] = [l[0], runs[0][1] + 96];
+          }
+          const d = off(me.tz) - off(you.tz);
+          document.getElementById("runs").innerHTML = runs.length
+            ? runs
+                .map(([s, e]) => {
+                  const h = ((e - s) * 15) / 60;
+                  return `<li><b>${fmtM(s * 15)}–${fmtM(e * 15)}</b> ${me.c} · ${h} h<small>${fmtM(s * 15 - d)}–${fmtM(e * 15 - d)} in ${you.c}</small></li>`;
+                })
+                .join("")
+            : `<li>No hours where you're both surely awake today. Look at the faded “maybe” hours, or move a bedtime in Settings.</li>`;
+        }
+
+        function counts() {
+          const now = Date.now(),
+            td = todayDn(SYD),
+            wd = parts(SYD).wd,
+            ct = toM(S.callTime),
+            vt = toM(S.vidTime);
+          let k = (+S.callDay - wd + 7) % 7,
+            call = localInstant(SYD, td + k, ct);
+          if (call <= now) call = localInstant(SYD, td + k + 7, ct);
+          const a = dn(S.vidDate);
+          let vd = a + Math.max(0, Math.ceil((td - a) / 14)) * 14,
+            vid = localInstant(SYD, vd, vt);
+          if (vid <= now) vid = localInstant(SYD, vd + 14, vt);
+          const leave = localInstant(SYD, dn(S.leave), 0),
+            meet = localInstant("Europe/Berlin", dn(S.meet), 0);
+          const both = (ms) => `${when(SYD, ms)} Sydney<br>${when("Europe/Berlin", ms)} Karlsruhe`;
+          const items = [];
+          if (leave > now)
+            items.push([
+              "Mika leaves Sydney",
+              `${Math.ceil((leave - now) / 864e5)} days`,
+              new Intl.DateTimeFormat("en-AU", {
+                timeZone: SYD,
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+              }).format(new Date(leave)),
+              1,
+            ]);
+          items.push(["Next phone call", dur(call - now), both(call)]);
+          items.push(["Next video call", dur(vid - now), both(vid)]);
+          items.push([
+            "Reunion D-day",
+            `${Math.ceil((meet - now) / 864e5)} days`,
+            new Intl.DateTimeFormat("en-AU", {
+              timeZone: "Europe/Berlin",
+              day: "numeric",
+              month: "long",
+              year: "numeric",
+            }).format(new Date(meet)),
+            leave > now ? 0 : 1,
+          ]);
+          document.getElementById("counts").innerHTML = items
+            .map(
+              ([t, v, w, h]) =>
+                `<div class="cnt${h ? " hl" : ""}"><div class="t">${t}</div><div class="big">${v}</div><div class="w">${w}</div></div>`,
+            )
+            .join("");
+          const g0 = off(SYD) - off("Europe/Berlin");
+          let msg = `The gap is ${g0 / 60} hours now.`;
+          const ch = [];
+          let gp = g0;
+          for (let i = 1; i < 400 && ch.length < 2; i++) {
+            const t = new Date(now + i * 864e5),
+              g = off(SYD, t) - off("Europe/Berlin", t);
+            if (g !== gp) {
+              ch.push([t, g]);
+              gp = g;
+            }
+          }
+          const df = (t) =>
+            new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", year: "numeric" }).format(t);
+          if (ch.length) {
+            msg += ` Around ${df(ch[0][0])} it becomes ${ch[0][1] / 60} hours`;
+            if (ch[1]) msg += `, then around ${df(ch[1][0])} ${ch[1][1] / 60} hours`;
+            msg +=
+              ", because the two countries switch daylight saving in opposite seasons. The app updates these dates automatically every year.";
+          }
+          document.getElementById("dst").textContent = msg;
+        }
+
+        const getK = (k) => k.split(".").reduce((o, x) => o[x], S);
+        const setK = (k, v) => {
+          const p = k.split(".");
+          let o = S;
+          while (p.length > 1) o = o[p.shift()];
+          o[p[0]] = v;
+        };
+        const form = document.getElementById("form");
+        form.querySelectorAll("[data-k]").forEach((el) => {
+          el.value = getK(el.dataset.k);
+        });
+        form.addEventListener("input", (e) => {
+          const el = e.target;
+          if (!el.dataset.k || !el.value) return;
+          setK(el.dataset.k, el.value);
+          save();
+          tick();
+          strip();
+          counts();
+        });
+        form.addEventListener("submit", (e) => e.preventDefault());
+
+        tick();
+        strip();
+        counts();
+        setInterval(tick, 1000);
+        setInterval(() => {
+          strip();
+          counts();
+        }, 30000);
+      }
+    </script>
+  </body>
+</html>
