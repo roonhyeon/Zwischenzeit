@@ -67,3 +67,4 @@ Pick one, open an issue, send a pull request. I'll review it. Strictly.
 - [ ] **Sync settings** between our phones, so changing a bedtime on one phone updates the other
 - [ ] **Push notification** when the other person posts something
 - [ ] **Fix the 00:xx hour in the widget**: the live timer drops the hour after midnight. There must be a cleverer trick.
+- [ ] **widget**
